@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');// on récupère le bodyparser
 const mongoose = require('mongoose'); // on récupère mongoose
 
 const sauceRoutes = require('./routes/sauce'); // on récupère les routes pour la sauce
+const userRoutes = require('./routes/user'); // on récupère les routes pour user
 
 /* MONGOOSE */
 mongoose.connect('mongodb+srv://OBUser_14:Weu293y0J3z2O2Zv@cluster0-sd7js.mongodb.net/SoPekocko?retryWrites=true&w=majority',
@@ -28,6 +29,7 @@ app.use(bodyParser.json()); //.json est une méthode de l'objet bodyParser qui v
 /* CHEMIN D'ACCES DES ENDPOINTS */
 
 app.use('api/sauces', sauceRoutes);
+app.use('/api/auth', userRoutes);
 
 
 // EXPORT SERVER
