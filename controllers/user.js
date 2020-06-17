@@ -21,7 +21,6 @@ exports.signup = (req, res, next) => {
 };
 
 /* LOGIN */
-
 exports.login = (req, res, next) => {
     User.findOne({email: req.body.email}) //pour trouver un seul utilisateur de la bdd (celui dont l'email correspond à l'email envoyé dans la requête
     .then(user => {// on doit vérifier si on a récupéré un user ou non
@@ -35,7 +34,11 @@ exports.login = (req, res, next) => {
             }
             res.status(200).json({ // si c'est ok, on renvoi un ojbet json 
                 userId: user._id, // avec l'identifiant
-                token: 'TOKEN' // et un TOKEN****
+                token: jwt.sign( // et avec un token grâce à l'appel de la fonction sign de jwt
+                    {userId: user._id}, //arg 1 = le payload (les données qu'on veut encoder dans le token)=l'id du user
+                    'xvdfetdhdkoroelddjkkz', // clés secrète
+                    {expiresIn:'24h'} //durée de vie
+                )
             });
         })
         .catch(error => res.status(500).json({error}));
