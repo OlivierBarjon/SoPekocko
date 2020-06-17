@@ -17,7 +17,7 @@ router.get('/',auth, sauceCtrl.getAllSauce); // on applique la logique métier g
 router.get('/:id',auth, sauceCtrl.getOneSauce); // on applique la logique métier getOneSauce du controleur à la route GET (ID)
 
 /* PUT */
-router.put('/:id',auth, sauceCtrl.modifySauce); // on applique la logique métier modifySauce du controleur à la route PUT
+router.put('/:id',auth, multer, sauceCtrl.modifySauce); // on applique la logique métier modifySauce du controleur à la route PUT
 
 /* DELETE */
 router.delete('/:id',auth, sauceCtrl.deleteSauce); // on applique la logique métier deleteSauce du controleur à la route DELETE
