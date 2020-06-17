@@ -5,6 +5,7 @@ const mongoose = require('mongoose'); // on récupère mongoose
 
 const sauceRoutes = require('./routes/sauce'); // on récupère les routes pour la sauce
 const userRoutes = require('./routes/user'); // on récupère les routes pour user
+const path = require('path'); // on récupère l'élément de node.js permettant d'accéder au chemin de notre systeme de fichiers
 
 /* MONGOOSE */
 mongoose.connect('mongodb+srv://OBUser_14:Weu293y0J3z2O2Zv@cluster0-sd7js.mongodb.net/SoPekocko?retryWrites=true&w=majority',
@@ -30,7 +31,7 @@ app.use(bodyParser.json()); //.json est une méthode de l'objet bodyParser qui v
 
 app.use('api/sauces', sauceRoutes);
 app.use('/api/auth', userRoutes);
-
+app.use('/images', express.static(path.join(__dirname, 'images')) ) // on veut que cette requête serve le dossier statique /image dont l'adresse est déterminé par la méthode path.join (avec __dirname = nom du dossier dans lequel on va se trouver auquel on va ajouter "images"
 
 // EXPORT SERVER
 

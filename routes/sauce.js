@@ -2,13 +2,13 @@ const express = require('express'); // on récupère express
 const router = express.Router(); // on crée un router avec la méthode d'express
 const sauceCtrl = require('../controllers/sauce'); // on récupère le controleur pour sauce
 const auth = require('../middleware/auth');// on récupère le middleware d'authentification
-
+const multer = require('../middleware/multer-config'); // on récupère le middleware de gestion des fichiers
 
 
 /* ### ROUTES ### */
 
 /* POST */
-router.post ('/',auth, sauceCtrl.createSauce); // on applique la logique métier createThing du controleur à la route POST
+router.post ('/',auth, multer, sauceCtrl.createSauce); // on applique la logique métier createThing du controleur à la route POST
 
 /* GET */
 router.get('/',auth, sauceCtrl.getAllSauce); // on applique la logique métier getAllSauce du controleur à la route GET

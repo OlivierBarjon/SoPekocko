@@ -5,9 +5,11 @@ const Sauce = require('../models/sauce'); // récupération du modèle
 
 /* POST */
 exports.createSauce = (req, res, next)=>{ 
-delete req.body._id; // on supprime en amont le faux _id envoyé par le front-end
-const sauce = new Sauce({ // on crée une instance de notre classe Sauce
-    ...req.body // on lui passe un objet JS contenant les infos du body requises
+    const sauceObject = JSON.parse(req.body.thing); // on extrait l'objet JSON de notre req.body.thing (qui est dorénavant un objet JS sous forme de chaîne de caractère) en transformant cette chaîne en objet
+    delete sauceObject._id; // on enlève l'id de sauceObject
+    const sauce = new Sauce({ // on crée une instance de notre classe Sauce
+    ...sauceObject,
+    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` // le frond en ne connaissant pas l'url de l'image (c'est le middleware multer qui le génère), il faut le définir manuellement dans un template littéral : protocol, host du serveur (la racine du serveur ou localhost:3000), répertoire, nom du fichier.
 });
 try {
     sauce.save(); // on enregistre notre sauce dans la base de donnée
