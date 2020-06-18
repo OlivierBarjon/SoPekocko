@@ -14,7 +14,7 @@ const normalizePort = val => { // la fonction normalizePort renvoie un port vali
 };
 
 const port = normalizePort(process.env.PORT || '3000'); // port 3000 ou port valide
-app.set('port', port);
+app.set('port', port); // assignation du port à l'application express
 
 const errorHandler = error => { // la fonction errorHandler recherche les différentes erreurs et les gère
   if (error.syscall !== 'listen') {
@@ -36,7 +36,7 @@ const errorHandler = error => { // la fonction errorHandler recherche les diffé
   }
 };
 
-const server = http.createServer(app); // création du serveur
+const server = http.createServer(app); // création du serveur (on passe l'appli express à notre serveur)
 
 server.on('error', errorHandler);
 server.on('listening', () => {

@@ -6,7 +6,7 @@ const fs = require('fs'); // récupération du package fs de node.js pour nous p
 
 /* POST */
 exports.createSauce = (req, res, next)=>{ 
-    const sauceObject = JSON.parse(req.body.thing); // on extrait l'objet JSON de notre req.body.thing (qui est dorénavant un objet JS sous forme de chaîne de caractère) en transformant cette chaîne en objet
+    const sauceObject = JSON.parse(req.body.sauce); // on extrait l'objet JSON de notre req.body.sauce (qui est dorénavant un objet JS sous forme de chaîne de caractère) en transformant cette chaîne en objet
     delete sauceObject._id; // on enlève l'id de sauceObject
     const sauce = new Sauce({ // on crée une instance de notre classe Sauce
     ...sauceObject,
@@ -42,10 +42,10 @@ Sauce.findOne({_id: req.params.id}) // récupération d'une sauce unique
 exports.modifySauce = (req, res, next)=> { 
     const thingObject = req.file ? // on crée l'objet thingObject et on utilise l'opérateur ternaire "? {} : {}" pour savoir si req.file existe (si l'image existe)
     { // si le fichier existe
-      ...JSON.parse(req.body.thing), // on fait comme pour la route POST
+      ...JSON.parse(req.body.sauce), // on fait comme pour la route POST
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };  // si req.file n'existe pas, on envoi simplement les éléments
-Sauce.updateOne({_id: req.params.id}, {...thingObject, _id: req.params.id}) //mise à jour d'une sauce
+Sauce.updateOne({_id: req.params.id}, {...sauceObject, _id: req.params.id}) //mise à jour d'une sauce
 .then(()=> res.status(200).json({message:'Sauce modifiée'}))
 .catch(error => res.status(400).json({error}));
 };
