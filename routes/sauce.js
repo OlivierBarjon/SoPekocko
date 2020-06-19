@@ -10,6 +10,9 @@ const multer = require('../middleware/multer-config'); // on récupère le middl
 /* POST */
 router.post ('/',auth, multer, sauceCtrl.createSauce); // on applique la logique métier createThing du controleur à la route POST
 
+/* POST LIKE */
+router.post('/:id/like', auth, sauceCtrl.postLike); // on applique la logique métier postLike du controleur à la route POST LIKE
+
 /* GET */
 router.get('/',auth, sauceCtrl.getAllSauce); // on applique la logique métier getAllSauce du controleur à la route GET
 
@@ -21,6 +24,7 @@ router.put('/:id',auth, multer, sauceCtrl.modifySauce); // on applique la logiqu
 
 /* DELETE */
 router.delete('/:id',auth, sauceCtrl.deleteSauce); // on applique la logique métier deleteSauce du controleur à la route DELETE
+
 
 
 /* EXPORT */
