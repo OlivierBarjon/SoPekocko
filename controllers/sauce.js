@@ -1,5 +1,6 @@
 const Sauce = require('../models/sauce'); // récupération du modèle
 const fs = require('fs'); // récupération du package fs de node.js pour nous permettre d'effectuer des opérations sur le systeme de fichiers
+const sauce = require('../models/sauce');
 
 
 /* ### LOGIQUE METIER ### */
@@ -54,7 +55,7 @@ Sauce.findOne({_id: req.params.id}) // récupération d'une sauce unique
 
 /* PUT */
 exports.modifySauce = (req, res, next)=> { 
-    const thingObject = req.file ? // on crée l'objet thingObject et on utilise l'opérateur ternaire "? {} : {}" pour savoir si req.file existe (si l'image existe)
+    const sauceObject = req.file ? // on crée l'objet sauceObject et on utilise l'opérateur ternaire "? {} : {}" pour savoir si req.file existe (si l'image existe)
     { // si le fichier existe
       ...JSON.parse(req.body.sauce), // on fait comme pour la route POST
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
@@ -64,11 +65,11 @@ Sauce.updateOne({_id: req.params.id}, {...sauceObject, _id: req.params.id}) //mi
 .catch(error => res.status(400).json({error}));
 };
 
-
+/* DELETE */
 
 exports.deleteSauce = (req, res, next) => {
-    Sauce.findOne({ _id: req.params.id }) // avant de supprimer l'objet de la base, on va le chercher (on prend celui qui a l'id qui correspond au paramètre de la requête) pour avoir l'url de l'image (comme ça on aura accès au nom du fichier et pourra le supprimer)
-      .then(thing => { // on veut récupérer le nom du fichier précisément
+    Sauce.findOne({_id: req.params.id}) // avant de supprimer l'objet de la base, on va le chercher (on prend celui qui a l'id qui correspond au paramètre de la requête) pour avoir l'url de l'image (comme ça on aura accès au nom du fichier et pourra le supprimer)
+      .then(sauce => { // on veut récupérer le nom du fichier précisément
         const filename = sauce.imageUrl.split('/images/')[1]; // on récupère l'url de l'image retourné par la base et on la split autour de la chaine de caractère "/images/". On récupère donc uniquement le nom du fichier
         fs.unlink(`images/${filename}`, () => { // on appelle la fonction "unlink" de fs qui permet de supprimer le fichier (1er arg : chemin de ce fichier). Le deuxième arg étant un callback qu'on lance une fois le fichier supprimé
           Sauce.deleteOne({ _id: req.params.id }) // ce callback supprime le thing de la base de donnée

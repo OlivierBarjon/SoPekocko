@@ -15,9 +15,9 @@ exports.signup = (req, res, next) => {
         });
         user.save()// on utilise la méthode save sur notre user pour l'enregistre dans la bdd
         .then(() => res.status(201).json({message : 'Utilisateur crée' }))
-        .catch(error => res.status(500).json( { error} ));
-    })
-    .catch(error => res.status(500).json( { error} ) );
+        .catch(error => res.status(500).json({message : 'Cette adresse mail semble être déjà utilisée'}));
+    })//?????????????
+    .catch(error => res.status(500).json( {error} ) );
 };
 
 /* LOGIN */
@@ -34,7 +34,7 @@ exports.login = (req, res, next) => {
             }
             res.status(200).json({ // si c'est ok, on renvoi un ojbet json 
                 userId: user._id, // avec l'identifiant
-                token: jwt.sign( // et avec un token grâce à l'appel de la fonction sign de jwt
+                token: jwt.sign( // et avec un token (grâce à l'appel de la fonction sign de jwt) qui servira pour les requêtes suivantes
                     {userId: user._id}, //arg 1 = le payload (les données qu'on veut encoder dans le token)=l'id du user
                     'xvdfetdhdkoroelddjkkz', // clés secrète
                     {expiresIn:'24h'} //durée de vie
