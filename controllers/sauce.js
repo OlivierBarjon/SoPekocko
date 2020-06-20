@@ -43,8 +43,8 @@ exports.postLike = (req, res, next) => {
   const userId = req.body.userId; // on récupère l'userId de l'utilisateur concerné
 
   if (like == 0) {
-    Sauce.findOne({ _id: req.params.id}) // on récupère la sauce concernée
-      .then((sauce) => {
+    Sauce.findOne({_id: req.params.id}) // on récupère la sauce concernée
+      .then(/* (sauce) => {
         if (sauce.usersLiked.includes(userId)){ // si cet utilisateur a déjà like la sauce
           Sauce.updateOne(//on modifie cette sauce
             { _id: req.params.id },
@@ -67,7 +67,8 @@ exports.postLike = (req, res, next) => {
             .then(() => res.status(200).json({ message: 'Dislike retiré' }))
             .catch((error) => res.status(400).json({ error }))
         }
-      })
+      } */() => res.status(200).json({message : 'avis supprimé'})
+      )
       .catch((error) => res.status(404).json({ error }))
   };
 
