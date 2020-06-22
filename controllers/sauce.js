@@ -31,7 +31,7 @@ exports.createSauce = (req, res, next) => {
     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` // le front end ne connaissant pas l'url de l'image (c'est le middleware multer qui le génère), il faut le définir manuellement dans un template littéral : protocol, host du serveur (la racine du serveur ou localhost:3000), répertoire, nom du fichier.
   });
   sauce.save()
-    .then(()=> res.status(201).json({message : 'Objet enregistré'}))
+    .then(()=> res.status(201).json({message : 'Sauce enregistrée'}))
     .catch(error => res.status(400).json({ error }));
 };
 
@@ -50,8 +50,8 @@ if (req.body.like == 1) {
               _id: req.params.id
             }
           )
-          .then(() => res.status(200).json({ message: 'like ajouté à la sauce' }))
-          .catch(() => res.status(404).json({ message: 'error' }))
+          .then(() => res.status(200).json({ message: 'like ajouté' }))
+          .catch(error => res.status(404).json({ error }))
 };
 
 if (req.body.like == -1) {
@@ -63,13 +63,13 @@ if (req.body.like == -1) {
       _id: req.params.id
     }
   )
-  .then(() => res.status(200).json({ message: 'dislike ajouté à la sauce' }))
-  .catch(() => res.status(404).json({ message: 'error' }))
+  .then(() => res.status(200).json({ message: 'dislike ajouté' }))
+  .catch(error => res.status(404).json({ error }))
 };
 
 if (req.body.like == 0) {
   Sauce.updateOne(
-    {_id: req.params.id, usersLiked: {$in: [req.body.userId]}},
+    {_id: req.params.id, usersLiked: {$in: [req.body.userId]}, usersDisliked: {$nin: [req.body.userId]}},
     {
       $pull: {usersLiked:req.body.userId},
       $inc: {likes:-1},
@@ -77,10 +77,10 @@ if (req.body.like == 0) {
     }
   )
   .then(() => res.status(200).json({ message: 'like supprimé' }))
-  .catch(() => res.status(404).json({ message: 'error' }));
+  .catch(error => res.status(406).json({ error }));
 
   Sauce.updateOne(
-    {_id: req.params.id, usersDisliked: {$in: [req.body.userId]}},
+    {_id: req.params.id, usersDisliked: {$in: [req.body.userId]}, usersLiked: {$nin: [req.body.userId]}},
     {
       $pull: {usersDisliked:req.body.userId},
       $inc: {dislikes:-1},
@@ -88,8 +88,8 @@ if (req.body.like == 0) {
     }
   )
   .then(() => res.status(200).json({ message: 'dislike supprimé' }))
-  .catch(() => res.status(404).json({ message: 'error' }))
-}
+  .catch(error => res.status(406).json({ error }))
+};
 
 /////////////////
 
@@ -190,7 +190,7 @@ exports.deleteSauce = (req, res, next) => {
         const filename = sauce.imageUrl.split('/images/')[1]; // on récupère l'url de l'image retourné par la base et on la split autour de la chaine de caractère "/images/". On récupère donc uniquement le nom du fichier
         fs.unlink(`images/${filename}`, () => { // on appelle la fonction "unlink" de fs qui permet de supprimer le fichier (1er arg : chemin de ce fichier). Le deuxième arg étant un callback qu'on lance une fois le fichier supprimé
           Sauce.deleteOne({ _id: req.params.id }) // ce callback supprime le thing de la base de donnée
-            .then(() => res.status(200).json({ message: 'Objet supprimé !'}))
+            .then(() => res.status(200).json({ message: 'Sauce supprimée !'}))
             .catch(error => res.status(400).json({ error }));
         });
       })
