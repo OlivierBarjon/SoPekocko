@@ -1,7 +1,10 @@
 const http = require('http'); // récupération du package http de node.js
 const app = require('./app'); // récupération de  l'application express
 
-const normalizePort = val => { // la fonction normalizePort renvoie un port valide
+
+/* NORMALIZE PORT */
+// la fonction normalizePort renvoie un port valide
+const normalizePort = val => { 
   const port = parseInt(val, 10);
 
   if (isNaN(port)) {
@@ -13,10 +16,13 @@ const normalizePort = val => { // la fonction normalizePort renvoie un port vali
   return false;
 };
 
-const port = normalizePort(process.env.PORT || '3000'); // port 3000 ou port valide
+const port = normalizePort(process.env.PORT || '3000'); // port 3000 ou port défini par l'environnement
 app.set('port', port); // assignation du port à l'application express
 
-const errorHandler = error => { // la fonction errorHandler recherche les différentes erreurs et les gère
+
+/* ERRORHONDLER */
+// la fonction errorHandler recherche les différentes erreurs et les gère
+const errorHandler = error => { 
   if (error.syscall !== 'listen') {
     throw error;
   }
