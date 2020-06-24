@@ -31,7 +31,7 @@ exports.createSauce = (req, res, next) => {
     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` // le front end ne connaissant pas l'url de l'image (c'est le middleware multer qui le génère), il faut le définir manuellement dans un template littéral : protocol, host du serveur (la racine du serveur ou localhost:3000), répertoire, nom du fichier.
   });
   sauce.save()
-    .then(()=> res.status(201).json({message : 'Sauce enregistrée'}))
+    .then(() => res.status(201).json({ message: 'Sauce enregistrée' }))
     .catch(error => res.status(400).json({ error }));
 };
 
@@ -126,9 +126,21 @@ exports.modifySauce = (req, res, next) => {
       ...JSON.parse(req.body.sauce), // on fait comme pour la route POST
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };  // si req.file n'existe pas, on envoi simplement les éléments
-  Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id }) //mise à jour d'une sauce
-    .then(() => res.status(200).json({ message: 'Sauce modifiée' }))
-    .catch(error => res.status(400).json({ error }));
+  if (req.file) {
+    Sauce.findOne({ _id: req.params.id })
+      .then(sauce => {
+        const filename = sauce.imageUrl.split('/images/')[1];
+        fs.unlink(`images/${filename}`, () => {// suppression de l'image à remplacer
+          Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id }) //mise à jour d'une sauce
+            .then(() => res.status(200).json({ message: 'Sauce et image modifiée' }))
+            .catch(error => res.status(400).json({ error }));
+        });
+      }).catch(error => res.status(400).json({ error }))
+  } else {
+    Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id }) //mise à jour d'une sauce
+      .then(() => res.status(200).json({ message: 'Sauce modifiée' }))
+      .catch(error => res.status(400).json({ error }));
+  }
 };
 
 /* DELETE */
