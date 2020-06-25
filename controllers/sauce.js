@@ -5,23 +5,6 @@ const sauce = require('../models/sauce');
 
 /* ### LOGIQUE MÉTIER ### */
 
-/* POST */
-/* exports.createSauce = (req, res, next) => {
-  const sauceObject = JSON.parse(req.body.sauce); // on extrait l'objet JSON de notre req.body.sauce (qui est dorénavant un objet JS sous forme de chaîne de caractère) en transformant cette chaîne en objet
-  delete sauceObject._id; // on enlève l'id de sauceObject
-  const sauce = new Sauce({ // on crée une instance de notre classe Sauce
-    ...sauceObject,
-    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` // le frond en ne connaissant pas l'url de l'image (c'est le middleware multer qui le génère), il faut le définir manuellement dans un template littéral : protocol, host du serveur (la racine du serveur ou localhost:3000), répertoire, nom du fichier.
-  });
-  try {
-    sauce.save(); // on enregistre notre sauce dans la base de donnée
-    res.status(201).json({ message: 'Sauce enregistrée' })
-  }
-  catch (error) {
-    res.status(400).json({ error });
-  };
-}; */
-
 /*POST */
 exports.createSauce = (req, res, next) => {
   const sauceObject = JSON.parse(req.body.sauce); // on extrait l'objet JSON de notre req.body.sauce (qui est dorénavant un objet JS sous forme de chaîne de caractère) en transformant cette chaîne en objet
@@ -44,7 +27,7 @@ exports.postLike = (req, res, next) => {
   if (like === 0) {
     Sauce.findOne({ _id: req.params.id }) // on récupère la sauce concernée
       .then((sauce) => {
-        console.log(sauce); // TEST
+        //console.log(sauce); // TEST
         if (sauce.usersLiked.includes(req.body.userId)) { // si cet utilisateur a déjà like la sauce
           Sauce.updateOne(//on modifie cette sauce
             { _id: req.params.id },
