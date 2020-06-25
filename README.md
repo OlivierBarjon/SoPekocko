@@ -1,9 +1,21 @@
 ## SoPeckoko
 
-Le frontend se trouve dans le dossier /frontend
+Le frontend se trouve dans le sous-module "dwj-projet6"
+Pour déployer le projet intégral sur votre poste de travail, lancez la commande suivante :
 
-## Development server
+`git clone --recurse-submodules https://github.com/OlivierBarjon/SoPekocko`
 
-Démarrer `ng serve` pour avoir accès au serveur de développement. Rendez-vous sur `http://localhost:4200/`. L'application va se recharger automatiquement si vous modifiez un fichier source.
+Dans un terminal, lancez les commandes suivantes (depuis le répertoire "SoPekocko") :
 
-Démarrer `nodemon server` pour lancer le backend
+1 : `npm install`
+2 : `nodemon server`
+
+Dans un autre terminal lancez les commandes suivantes (depuis le répertoire "dwj-projet6") :
+
+1 : `npm install`(si une erreur s'affiche, lancez la commande `npm install node-sass`)
+2 : `npm start` 
+
+
+Rendez-vous sur `http://localhost:4200/`
+
+
