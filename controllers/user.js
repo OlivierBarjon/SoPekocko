@@ -36,7 +36,7 @@ exports.login = (req, res, next) => {
                         userId: user._id, // avec l'identifiant
                         token: jwt.sign( // et avec un token (grâce à l'appel de la fonction sign de jwt) qui servira pour les requêtes suivantes
                             { userId: user._id }, //arg 1 = le payload (les données qu'on veut encoder dans le token)=l'id du user
-                            'xvdfetdhdkoroelddjkkz', // clé secrète
+                            process.env.TOKEN_KEY, // clé secrète
                             { expiresIn: '24h' } //durée de vie
                         )
                     });

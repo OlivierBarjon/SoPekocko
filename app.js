@@ -4,12 +4,15 @@ const bodyParser = require('body-parser');// on récupère le bodyparser
 const mongoose = require('mongoose'); // on récupère mongoose
 const mongoSanitize = require('express-mongo-sanitize'); // on récupère mongo express sanitize
 
+/*Variables d'environnement */
+require('dotenv').config()
+
 const sauceRoutes = require('./routes/sauce'); // on récupère les routes pour la sauce
 const userRoutes = require('./routes/user'); // on récupère les routes pour user
 const path = require('path'); // on récupère l'élément de node.js permettant d'accéder au chemin de notre systeme de fichiers
 
 /* MONGOOSE */
-mongoose.connect('mongodb+srv://OBUser_14:Weu293y0J3z2O2Zv@cluster0-sd7js.mongodb.net/SoPekocko?retryWrites=true&w=majority',
+mongoose.connect(process.env.DBMONGO_URI,
 	{
 		useNewUrlParser: true,
 		useUnifiedTopology: true
@@ -29,7 +32,7 @@ app.use((req, res, next) => {
 /* BODY PARSER */
 app.use(bodyParser.urlencoded({extended:true})); // on applique une fonction du body parser qui nous servira pour express mongo sanitize
 app.use(bodyParser.json()); //.json est une méthode de l'objet bodyParser qui va transformer le corps des requêtes en objets JSON
-app.use(mongoSanitize()); // // MONGO SANITIZE !!!!!! to remove prohibed characters
+app.use(mongoSanitize()); // MONGO SANITIZE !!!!!! to remove prohibed characters
 
 /* CHEMIN D'ACCES DES ENDPOINTS */
 
