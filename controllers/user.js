@@ -13,7 +13,7 @@ exports.signup = (req, res, next) => {
                 email: req.body.email, // on enregistre l'email du body dans le paramètre email
                 password: hash  // on enregistre le hash dans le paramètre password
             });
-            user.save()// on utilise la méthode save sur notre user pour l'enregistre dans la bdd
+            user.save()// on utilise la méthode save sur notre user pour l'enregistrer dans la bdd
                 .then(() => res.status(201).json({ message: 'Utilisateur crée' }))
                 .catch(error => res.status(500).json({ message: 'Cette adresse mail semble être déjà utilisée' }));
         })
