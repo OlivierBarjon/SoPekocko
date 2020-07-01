@@ -1,10 +1,10 @@
 const http = require('http'); // récupération du package http de node.js
-const app = require('./app'); // récupération de  l'application express
+const app = require('./app'); // récupération de l'application express
 
 
 /* NORMALIZE PORT */
 // la fonction normalizePort renvoie un port valide
-const normalizePort = val => { 
+const normalizePort = val => {
   const port = parseInt(val, 10);
 
   if (isNaN(port)) {
@@ -15,14 +15,15 @@ const normalizePort = val => {
   }
   return false;
 };
-console.log(process.env);
+
+//console.log(process.env); // LISTES VARIABLES ENVIRONNEMENT POUR TEST
 const port = normalizePort(process.env.PORT || '3000'); // port 3000 ou port défini par l'environnement
 app.set('port', port); // assignation du port à l'application express
 
 
-/* ERRORHONDLER */
+/* ERRORHANDLER */
 // la fonction errorHandler recherche les différentes erreurs et les gère
-const errorHandler = error => { 
+const errorHandler = error => {
   if (error.syscall !== 'listen') {
     throw error;
   }
@@ -51,4 +52,4 @@ server.on('listening', () => {
   console.log('Listening on ' + bind);
 });
 
-server.listen(port); // configuration du serveur sur le port 3000
+server.listen(port); // configuration du serveur sur le port (3000 par défaut)

@@ -1,13 +1,12 @@
 const Sauce = require('../models/sauce'); // récupération du modèle
 const fs = require('fs'); // récupération du package fs de node.js pour nous permettre d'effectuer des opérations sur le systeme de fichiers
-const sauce = require('../models/sauce');
 
 
 /* ### LOGIQUE MÉTIER ### */
 
 /*POST */
 exports.createSauce = (req, res, next) => {
-  const sauceObject = JSON.parse(req.body.sauce); // on extrait l'objet JSON de notre req.body.sauce (qui est dorénavant un objet JS sous forme de chaîne de caractère) en transformant cette chaîne en objet
+  const sauceObject = JSON.parse(req.body.sauce); // on extrait l'objet JSON de notre req.body.sauce (qui est un objet JS sous forme de chaîne de caractère) en transformant cette chaîne en objet
   delete sauceObject._id; // on enlève l'id de sauceObject
   const sauce = new Sauce({ // on crée une instance de notre classe Sauce
     ...sauceObject,
@@ -53,7 +52,7 @@ exports.postLike = (req, res, next) => {
             .catch((error) => res.status(400).json({ error }))
         }
         else {
-          () => res.status(200).json({ message: 'Merci de nous donner votre avis' }) // TEST
+          () => res.status(200).json({ message: 'Merci de nous donner votre avis' }) 
         }
       }
       )
@@ -129,9 +128,9 @@ exports.modifySauce = (req, res, next) => {
 /* DELETE */
 
 exports.deleteSauce = (req, res, next) => {
-  Sauce.findOne({ _id: req.params.id }) // avant de supprimer l'objet de la base, on va le chercher (on prend celui qui a l'id qui correspond au paramètre de la requête) pour avoir l'url de l'image (comme ça on aura accès au nom du fichier et pourra le supprimer)
+  Sauce.findOne({ _id: req.params.id }) // on recherche l'objet qui a l'id qui correspond au paramètre de la requête pour avoir l'url de l'image (on aura alors accès au nom du fichier et pourra le supprimer)
     .then(sauce => { // on veut récupérer le nom du fichier précisément
-      const filename = sauce.imageUrl.split('/images/')[1]; // on récupère l'url de l'image retourné par la base et on la split autour de la chaine de caractère "/images/". On récupère donc uniquement le nom du fichier
+      const filename = sauce.imageUrl.split('/images/')[1]; // on récupère l'url de l'image retourné par la base et on la split autour de la chaine de caractère "/images/". On récupère ainsi uniquement le nom du fichier
       fs.unlink(`images/${filename}`, () => { // on appelle la fonction "unlink" de fs qui permet de supprimer le fichier (1er arg : chemin de ce fichier). Le deuxième arg étant un callback qu'on lance une fois le fichier supprimé
         Sauce.deleteOne({ _id: req.params.id }) // ce callback supprime le thing de la base de donnée
           .then(() => res.status(200).json({ message: 'Sauce supprimée !' }))

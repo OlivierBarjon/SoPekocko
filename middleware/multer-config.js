@@ -1,6 +1,6 @@
 /* ### MULTER - gestion des fichiers images ### */
 
-const multer = require('multer'); // on récupère multer
+const multer = require('multer'); // on récupère le package multer
 
 const MIME_TYPES = { //on crée un objet qui nous permettra de lister les extensions par rapport aux mime-types des fichiers envoyés (en JS on a pas accès au extensions, seulement au mime-types)
     'image/jpg': 'jpg',
@@ -19,13 +19,13 @@ const storage = multer.diskStorage({ // on crée un objet de configuration pour 
     }
 });
 
-const fileFilter = (req, file, callback) => {// on crée un filtre sur les fichier de type "jpg", "jpeg" ou "png"
+const fileFilter = (req, file, callback) => {// on crée un filtre sur les fichiers de type "jpg", "jpeg" ou "png"
     const extension = MIME_TYPES[file.mimetype]; 
     if (extension === 'jpg' || extension === 'png') {
         callback (null, true);
         
     } else {
-        callback('Erreur : Mauvais type de fichier', false);
+        callback('Erreur : Mauvais type de fichier', false); // si le fichier envoyé est différent de celui attendu, on envoi un message d'erreur
     }
 };
 
@@ -34,4 +34,4 @@ module.exports = multer({
     storage, 
     limits: { fileSize: 5242880 }, 
     fileFilter 
-}).single('image');// on exporte notre middleware  en appelant  la méthode multer à laquelle on passe notre objet storage et on appelle la méthode single pour dire que c'est un objet unique (et non pas un groupe de fichiers) en lui précisant qu'il s'agit de fichier image uniquement (MIME) d'un point maximum de 5Mo (5242880 bytes)
+}).single('image');// on exporte notre middleware  en appelant  la méthode multer à laquelle on passe notre objet storage. On appelle la méthode single pour préciser qu'il s'agit d'un objet unique (et non pas un groupe de fichiers). On ajoute également notre filtre ainsi qu'un paramètre multer concernant le point maximum : 5Mo (5242880 bytes)
