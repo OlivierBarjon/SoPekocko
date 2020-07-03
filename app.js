@@ -3,7 +3,7 @@ const app = express(); // création d'une application express
 const bodyParser = require('body-parser');// on récupère le bodyparser
 const mongoose = require('mongoose'); // on récupère mongoose
 const mongoSanitize = require('express-mongo-sanitize'); // on récupère mongo express sanitize
-
+const helmet = require('helmet'); // on récupère Helmet (sécurise les appli Express en définissant divers en-têtes HTTP)
 require('dotenv').config() /*Variables d'environnement */
 
 const sauceRoutes = require('./routes/sauce'); // on récupère les routes pour la sauce
@@ -32,6 +32,9 @@ app.use((req, res, next) => {
 app.use(bodyParser.urlencoded({extended:true})); // on applique une fonction du body parser qui nous servira pour express mongo sanitize
 app.use(bodyParser.json()); //.json est une méthode de l'objet bodyParser qui va transformer le corps des requêtes en objets JSON
 app.use(mongoSanitize()); // MONGO SANITIZE !!!!!! to remove prohibed characters
+
+/* HELMET */
+app.use(helmet());
 
 /* CHEMIN D'ACCES DES ENDPOINTS */
 
